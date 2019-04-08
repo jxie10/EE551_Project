@@ -1,0 +1,2 @@
+Image Size 122x200
+Background Size 1200x640
