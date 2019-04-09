@@ -1,12 +1,6 @@
 import pygame
 from pygame.locals import *
-from sys import exit
 import random
-pool=[1,2,3,4,5,6,7,8,9,10,11,12,13]
-player_handcard=[]
-ai_handcard=[]
-player_score = 0
-ai_score = 0
 
 def Dealing(pool):
     #release a poker and delete the card in the pool
@@ -26,10 +20,8 @@ def Conditional_Dealing(pool):
         ai_handcard.append(Dealing(pool))
     return player_handcard,ai_handcard
 
-def Hit_or_Stand():
-    if player_score >= 21:
-        pygame.event.set_blocked(MOUSEBUTTONDOWN)
-    elif event.type == pygame.MOUSEBUTTONDOWN:
+def Hit_or_Stand(event,player_handcard,pool):
+    if event.type == pygame.MOUSEBUTTONDOWN:
         player_handcard.append(Dealing(pool))
         return player_handcard
 
@@ -120,3 +112,8 @@ def Drawcard_player_else(initialposition1,initialposition2):
             Drawcard_player(i,initialposition1,initialposition2)
             initialposition1 += 132
     except:pygame.display.update()
+
+def Message(text,size,*color):
+    my_font = pygame.font.SysFont("arial",size)
+    surface = my_font.render(text,True,color)
+    return surface
