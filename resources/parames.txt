@@ -1,2 +1,4 @@
 Image Size 122x200
 Background Size 1200x640
+button Size 122x30
+Continue Size 155x46
