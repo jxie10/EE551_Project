@@ -10,7 +10,7 @@ pool=[1,2,3,4,5,6,7,8,9,10,11,12,13]
 player_handcard=[]
 ai_handcard=[]
 player_stand = False
-ai_stand = False
+ai_stand = True
 
 
 #Set Image Resolution
@@ -39,6 +39,14 @@ card11 = pygame.image.load('resources/Card11.png')
 card12 = pygame.image.load('resources/Card12.png')
 card13 = pygame.image.load('resources/Card13.png')
 cardback = pygame.image.load('resources/Cardback.png')
+Hit_button = pygame.image.load('resources/button.png')
+Stand_button = pygame.image.load('resources/button.png')
+
+#Generate Words
+Hit_surface = Functions.Message('Hit',25,0,0,0)
+Stand_surface = Functions.Message('Stand',25,0,0,0)
+cont_surface = Functions.Message("Continue",40,0,0,0)
+
 
 def Dealing(pool):
     #release a poker and delete the card in the pool
@@ -57,11 +65,6 @@ def Conditional_Dealing(pool):
         del ai_handcard[1]
         ai_handcard.append(Dealing(pool))
     return player_handcard,ai_handcard
-
-def Hit_or_Stand():
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        player_handcard.append(Dealing(pool))
-        return player_handcard
 
 def Drawcard_player(cardnum,pos1,pos2):
     cardnum -= 1
@@ -131,7 +134,7 @@ def Drawcard_player_else(initialposition1,initialposition2):
             i += 3
             Drawcard_player(i,initialposition1,initialposition2)
             initialposition1 += 132
-    except:pygame.display.update()
+    except:pass
 
 def reset():
     global pool
@@ -140,15 +143,17 @@ def reset():
     global player_stand
     global ai_stand
     global ai_hide
+    global cont_surface
     pool=[1,2,3,4,5,6,7,8,9,10,11,12,13]
     player_handcard=[]
     ai_handcard=[]
     player_stand = False
-    ai_stand = False
+    ai_stand = True
     player_handcard.append(Dealing(pool))
     ai_handcard.append(Dealing(pool))
     Conditional_Dealing(pool)
     ai_hide=['cardback',ai_handcard[1]]
+    cont_surface = Functions.Message("Continue",40,0,0,0)
 
 player_handcard.append(Dealing(pool))
 ai_handcard.append(Dealing(pool))
@@ -158,48 +163,87 @@ ai_hide=['cardback',ai_handcard[1]]
 
 
 while True:
-    #Draw background
+    #Counting player's and ai's score
     player_score = 0
     for i in player_handcard:
         player_score += i
     ai_score = 0
     for i in ai_handcard:
         ai_score += i
+
+    #Draw elements
     screen.blit(background,(0,0))
+
+    player_score_surface1 = Functions.Message('player score:',25,0,0,0)
+    player_score_surface2 = Functions.Message(str(player_score),25,0,0,0)
     Drawcard_player(1,0,0)
     Drawcard_ai(1,0,250)
     Drawcard_player(2,132,0)
     Drawcard_ai(2,132,250)
     Drawcard_player_else(264,0)
-    pygame.display.update()
+    screen.blit(player_score_surface1,(800,300))
+    screen.blit(player_score_surface2,(950,302))
+    screen.blit(Hit_button,(500,300))
+    screen.blit(Stand_button,(500,360))
+    screen.blit(Hit_surface,(500,300))
+    screen.blit(Stand_surface,(500,360))
 
+    #Get mouse position
+    mousepos = pygame.mouse.get_pos()
+
+    #Check quit or Hit or Stand
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
         if player_stand and ai_stand:
-            if event.type == KEYDOWN:
-                if event.key == K_SPACE:
+            if 805 <= mousepos[0] <= 955 and 400 <= mousepos[1] <= 441:
+                cont_surface = Functions.Message("Continue",40,255,255,0)
+                if event.type == pygame.MOUSEBUTTONDOWN:
                     reset()
                     player_score = 0
-        if player_score >= 21:
+            else:
+                cont_surface = Functions.Message("Continue",40,0,0,0)
+
+
+        if 505<=mousepos[0]<=617 and 305<=mousepos[1]<=325 and player_score < 21:
+            if not player_stand or ai_stand:
+                Hit_surface = Functions.Message("Hit",25,255,255,0)
+                Functions.Hit_or_Stand(event,player_handcard,pool)
+                player_stand = False
+        elif player_score >= 21:
+            Hit_surface = Functions.Message("Hit",25,192,192,192)
             player_stand = True
-            ai_stand = True
-            break
-        Hit_or_Stand()
+        elif player_score < 21 and player_stand and ai_stand:
+            Hit_surface = Functions.Message("Hit",25,192,192,192)
+        else:
+            Hit_surface = Functions.Message("Hit",25,0,0,0)
+
+        if 505<=mousepos[0]<=617 and 365<=mousepos[1]<=385:
+            if not player_stand or not ai_stand:
+                Stand_surface = Functions.Message("Stand",25,255,255,0)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    player_stand = True
+        elif player_stand and ai_stand:
+            Stand_surface = Functions.Message("Stand",25,192,192,192)
+        else:
+            Stand_surface = Functions.Message("Stand",25,0,0,0)
 
     if player_stand and ai_stand:
         if Functions.judgement(player_score,ai_score) == 1:
-            print('Win')
+            Win_surface = Functions.Message("You win",40,0,0,0)
+            screen.blit(Win_surface,(800,100))
         elif Functions.judgement(player_score,ai_score) == 2:
-            print('Draw')
+            Draw_surface = Functions.Message("It's a draw",40,0,0,0)
+            screen.blit(Draw_surface,(800,100))
         elif Functions.judgement(player_score,ai_score) == 3:
-            print('Loose')
+            Loose_surface = Functions.Message("You Loose",40,0,0,0)
+            screen.blit(Loose_surface,(800,100))
+        screen.blit(cont_surface,(800,400))
+
+    pygame.display.update()
 
 
 
-
-
-    print(player_handcard,player_score,ai_score)
 
 
 
