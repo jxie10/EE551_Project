@@ -111,9 +111,40 @@ def Drawcard_player_else(initialposition1,initialposition2):
             i += 3
             Drawcard_player(i,initialposition1,initialposition2)
             initialposition1 += 132
-    except:pygame.display.update()
+    except:pass
+
+def Drawcard_ai_else(initialposition1,initialposition2):
+    try:
+        for i in range(4):
+            i += 3
+            Drawcard_ai(i,initialposition1,initialposition2)
+            initialposition1 += 132
+    except:pass
 
 def Message(text,size,*color):
     my_font = pygame.font.SysFont("arial",size)
     surface = my_font.render(text,True,color)
     return surface
+
+def ai_Hit(ai_score,ai_handcard,pool,ai_stand):
+    if ai_score <= 10:
+        if random.randint(range(1,100))<=86:
+            return ai_handcard.append(Dealing(pool))
+    elif 10 < ai_score <= 12:
+        if random.randint(range(1,100))<=71:
+            return ai_handcard.append(Dealing(pool))
+    elif 12 < ai_score <= 15:
+        if random.randint(range(1,100))<=65:
+            return ai_handcard.append(Dealing(pool))
+    elif 15 < ai_score <= 17:
+        if random.randint(range(1,100))<=28:
+            return ai_handcard.append(Dealing(pool))
+    elif 17 < ai_score <= 19:
+        if random.randint(range(1,100))<=16:
+            return ai_handcard.append(Dealing(pool))
+    elif 19 < ai_score <= 20:
+        if random.randint(range(1,100))<=5:
+            return ai_handcard.append(Dealing(pool))
+
+
+
