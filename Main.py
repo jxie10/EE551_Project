@@ -60,6 +60,7 @@ surface_500 = Functions.Message('500$',20,0,0,0)
 surface_1000 = Functions.Message('1000$',20,0,0,0)
 player_total_score_surface1 = Functions.Message("player total score",25,0,0,0)
 ai_total_score_surface1 = Functions.Message("ai total score",25,0,0,0)
+New_game = Functions.Message('New Game',40,0,0,0)
 
 
 def Dealing(pool):
@@ -186,16 +187,10 @@ def reset():
     cont_surface = Functions.Message("Continue",40,0,0,0)
     quit_surface = Functions.Message("Quit",40,0,0,0)
 
-def quit():
-    global Start
-    reset()
-    Start = 0
-
 player_handcard.append(Dealing(pool))
 ai_handcard.append(Dealing(pool))
 Conditional_Dealing(pool)
 ai_hide=['cardback',ai_handcard[1]]
-
 
 
 while True:
@@ -248,8 +243,33 @@ while True:
             else:
                 surface_1000 = Functions.Message('1000$',20,0,0,0)
 
+    #Quit the game
+    if Start == 5:
+        screen.blit(background,(0,0))
+        if player_total_score > ai_total_score:
+            win_surface = Functions.Message("You win!",40,0,0,0)
+            screen.blit(win_surface,(600,320))
+        elif player_total_score < ai_total_score:
+            loose_surface = Functions.Message("You Loose",40,0,0,0)
+            screen.blit(loose_surface,(600,320))
+        elif player_total_score == ai_total_score:
+            draw_surface = Functions.Message("It's a draw",40,0,0,0)
+            screen.blit(draw_surface,(600,320))
+        screen.blit(New_game,(600,420))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+            if 600 <= mousepos[0] <= 755 and 420 <= mousepos[1] <= 466:
+                New_game = Functions.Message("New Game",40,255,255,0)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    Start = 0
+                    reset()
+                    player_total_score = 5000
+                    ai_total_score = 5000
+            else:
+                New_game = Functions.Message("New Game",40,0,0,0)
 
-    if Start:
+    if 0 < Start < 5:
         #Counting player's and ai's score
         player_score = 0
         for i in player_handcard:
@@ -314,6 +334,7 @@ while True:
                                 player_total_score -= 1000
                                 ai_total_score += 1000
                         reset()
+                        Start = 0
                         player_score = 0
                         ai_score = 0
                 else:
@@ -321,7 +342,33 @@ while True:
                 if 805 <= mousepos[0] <= 955 and 500 <= mousepos[1] <= 541:
                     quit_surface = Functions.Message("Quit",40,255,255,0)
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        quit()
+                        if Functions.judgement(player_score,ai_score) == 1:
+                            if Start == 1:
+                                player_total_score += 100
+                                ai_total_score -= 100
+                            elif Start == 2:
+                                player_total_score += 200
+                                ai_total_score -= 200
+                            elif Start == 3:
+                                player_total_score += 500
+                                ai_total_score -= 500
+                            elif Start == 4:
+                                player_total_score += 1000
+                                ai_total_score -= 1000
+                        elif Functions.judgement(player_score,ai_score) == 3:
+                            if Start == 1:
+                                player_total_score -= 100
+                                ai_total_score += 100
+                            elif Start == 2:
+                                player_total_score -= 200
+                                ai_total_score += 200
+                            elif Start == 3:
+                                player_total_score -= 500
+                                ai_total_score += 500
+                            elif Start == 4:
+                                player_total_score -= 1000
+                                ai_total_score += 1000
+                        Start = 5
                         player_score = 0
                         ai_score = 0
                 else:
@@ -329,7 +376,7 @@ while True:
 
             #Check Hit or Stand
             if 505<=mousepos[0]<=617 and 305<=mousepos[1]<=325 and player_score < 21:
-                if not player_stand or not ai_Hit:
+                if not player_stand:
                     Hit_surface = Functions.Message("Hit",25,255,255,0)
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         player_handcard.append(Dealing(pool))
@@ -346,7 +393,7 @@ while True:
                 Hit_surface = Functions.Message("Hit",25,0,0,0)
 
             if 505<=mousepos[0]<=617 and 365<=mousepos[1]<=385:
-                if not player_stand or not ai_Hit:
+                if not player_stand or not ai_stand:
                     Stand_surface = Functions.Message("Stand",25,255,255,0)
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         player_stand = True
@@ -357,10 +404,10 @@ while True:
                 Stand_surface = Functions.Message("Stand",25,0,0,0)
 
 
-
+        #ai Hit
         if ai_Hit:
             if ai_score <= 10:
-                if random.randint(1,100)<=86:
+                if random.randint(1,100)<=85:
                     ai_Hit = False
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
@@ -368,14 +415,6 @@ while True:
                     ai_stand = True
                     ai_Hit = False
             elif 10 < ai_score <= 12:
-                if random.randint(1,100)<=71:
-                    ai_Hit = False
-                    ai_stand = False
-                    ai_handcard.append(Dealing(pool))
-                else:
-                    ai_stand = True
-                    ai_Hit = False
-            elif 12 < ai_score <= 15:
                 if random.randint(1,100)<=65:
                     ai_Hit = False
                     ai_stand = False
@@ -383,8 +422,16 @@ while True:
                 else:
                     ai_stand = True
                     ai_Hit = False
+            elif 12 < ai_score <= 15:
+                if random.randint(1,100)<=40:
+                    ai_Hit = False
+                    ai_stand = False
+                    ai_handcard.append(Dealing(pool))
+                else:
+                    ai_stand = True
+                    ai_Hit = False
             elif 15 < ai_score <= 17:
-                if random.randint(1,100)<=28:
+                if random.randint(1,100)<=14:
                     ai_Hit = False
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
@@ -392,7 +439,7 @@ while True:
                     ai_stand = True
                     ai_Hit = False
             elif 17 < ai_score <= 19:
-                if random.randint(1,100)<=16:
+                if random.randint(1,100)<=8:
                     ai_Hit = False
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
@@ -400,7 +447,7 @@ while True:
                     ai_stand = True
                     ai_Hit = False
             elif 19 < ai_score <= 20:
-                if random.randint(1,100)<=5:
+                if random.randint(1,100)<=1:
                     ai_Hit = False
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
@@ -436,7 +483,10 @@ while True:
             screen.blit(cont_surface,(800,400))
             screen.blit(quit_surface,(800,500))
 
-        print(ai_Hit,ai_handcard,ai_score)
+        if player_total_score <= 0 or ai_total_score <= 0:
+            Start = 5
+
+        print(Start)
 
 
 
