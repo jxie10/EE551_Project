@@ -3,3 +3,4 @@ Background Size 1200x640
 button Size 122x30
 Continue Size 155x46
 poker chips 100x103
+100$ 44x24
