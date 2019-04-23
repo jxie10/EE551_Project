@@ -74,8 +74,8 @@ ai_total_score_surface1 = Functions.Message("Computer's Money:", 25, 0, 0, 0)
 player_total_score_surface3 = Functions.Message("$", 25, 0, 0, 0)
 ai_total_score_surface3 = Functions.Message("$", 25, 0, 0, 0)
 New_game = Functions.Message('New Game', 40, 0, 0, 0)
-Player_surface = Functions.Message("You",40,0,0,0)
-AI_surface = Functions.Message("Computer",35,0,0,0)
+Player_surface = Functions.Message("You", 40, 0, 0, 0)
+AI_surface = Functions.Message("Computer", 35, 0, 0, 0)
 
 
 def Dealing(pool):
@@ -225,6 +225,7 @@ def reset():
     global initial_position_player
     global initial_position_ai
     global ai_condition
+    global New_game
     pool = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
     player_handcard = []
     ai_handcard = []
@@ -241,6 +242,7 @@ def reset():
     initial_position_player = {'x3': 1200, 'x4': 1200, 'x5': 1200, 'x6': 1200}
     initial_position_ai = {'x3': 1200, 'x4': 1200, 'x5': 1200, 'x6': 1200}
     ai_condition = Functions.Message("", 25, 0, 0, 0)
+    New_game = Functions.Message('New Game', 40, 0, 0, 0)
 
 
 # initialize
@@ -266,6 +268,12 @@ while True:
     screen.blit(ai_total_score_surface2, (530, 32))
     screen.blit(ai_total_score_surface3, (586, 32))
     pygame.display.update()
+
+    if player_total_score < 0:
+        player_total_score = 0
+    if ai_total_score < 0:
+        ai_total_score = 0
+
     # Press Start to start game
     if Start == 0:
         screen.blit(background, (0, 0))
@@ -273,10 +281,6 @@ while True:
         screen.blit(chip200, (430, 400))
         screen.blit(chip500, (660, 400))
         screen.blit(chip1000, (890, 405))
-        screen.blit(surface_100, (228, 438))
-        screen.blit(surface_200, (458, 436))
-        screen.blit(surface_500, (690, 437))
-        screen.blit(surface_1000, (910, 438))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
@@ -286,42 +290,52 @@ while True:
                     Start = 1
             else:
                 surface_100 = Functions.Message('100$', 20, 0, 0, 0)
-            if 430 <= mousepos[0] <= 530 and 400 <= mousepos[1] <= 500:
+            if 430 <= mousepos[0] <= 530 and 400 <= mousepos[1] <= 500 and player_total_score >= 200:
                 surface_200 = Functions.Message('200$', 20, 255, 255, 0)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     Start = 2
+            elif player_total_score < 200:
+                surface_200 = Functions.Message('200$', 20, 192, 192, 192)
             else:
                 surface_200 = Functions.Message('200$', 20, 0, 0, 0)
-            if 660 <= mousepos[0] <= 760 and 400 <= mousepos[1] <= 500:
+            if 660 <= mousepos[0] <= 760 and 400 <= mousepos[1] <= 500 <= player_total_score:
                 surface_500 = Functions.Message('500$', 20, 255, 255, 0)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     Start = 3
+            elif player_total_score < 500:
+                surface_500 = Functions.Message('500$', 20, 192, 192, 192)
             else:
                 surface_500 = Functions.Message('500$', 20, 0, 0, 0)
-            if 890 <= mousepos[0] <= 990 and 405 <= mousepos[1] <= 495:
+            if 890 <= mousepos[0] <= 990 and 405 <= mousepos[1] <= 495 and player_total_score >= 1000:
                 surface_1000 = Functions.Message('1000$', 20, 255, 255, 0)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     Start = 4
+            elif player_total_score < 1000:
+                surface_1000 = Functions.Message('1000$', 20, 192, 192, 192)
             else:
                 surface_1000 = Functions.Message('1000$', 20, 0, 0, 0)
+        screen.blit(surface_100, (228, 438))
+        screen.blit(surface_200, (458, 436))
+        screen.blit(surface_500, (690, 437))
+        screen.blit(surface_1000, (910, 438))
 
     # Quit the game
     if Start == 5:
         screen.blit(background, (0, 0))
         if player_total_score > ai_total_score:
-            win_surface = Functions.Message("You win!", 40, 0, 0, 0)
-            screen.blit(win_surface, (600, 320))
+            win_surface = Functions.Message("You win!", 60, 0, 0, 0)
+            screen.blit(win_surface, (487.5, 200))
         elif player_total_score < ai_total_score:
-            loose_surface = Functions.Message("You Loose!", 40, 0, 0, 0)
-            screen.blit(loose_surface, (600, 320))
+            loose_surface = Functions.Message("You Loose!", 60, 0, 0, 0)
+            screen.blit(loose_surface, (451, 200))
         elif player_total_score == ai_total_score:
-            draw_surface = Functions.Message("Draw!", 40, 0, 0, 0)
-            screen.blit(draw_surface, (600, 320))
-        screen.blit(New_game, (600, 420))
+            draw_surface = Functions.Message("Draw!", 60, 0, 0, 0)
+            screen.blit(draw_surface, (521, 200))
+        screen.blit(New_game, (500, 320))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
-            if 600 <= mousepos[0] <= 755 and 420 <= mousepos[1] <= 466:
+            if 500 <= mousepos[0] <= 700 and 320 <= mousepos[1] <= 366:
                 New_game = Functions.Message("New Game", 40, 255, 255, 0)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     Start = 0
@@ -342,8 +356,8 @@ while True:
 
         # Draw elements
         screen.blit(background, (0, 0))
-        screen.blit(Player_surface,(20,550))
-        screen.blit(AI_surface,(5,20))
+        screen.blit(Player_surface, (20, 550))
+        screen.blit(AI_surface, (5, 20))
         player_score_surface1 = Functions.Message('Your score:', 25, 0, 0, 0)
         player_score_surface2 = Functions.Message(str(player_score), 25, 0, 0, 0)
         Drawcard_player(1, initial_position['x1'], player_card_position_y)
@@ -474,11 +488,12 @@ while True:
         # ai Hit or Stand
         if ai_Hit:
             if ai_score <= 10:
-                if random.randint(1, 100) <= 85:
+                if random.randint(1, 100) <= 90:
                     ai_Hit = False
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
                     ai_condition = Functions.Message("Computer Hit", 25, 0, 0, 0)
+                    pygame.time.delay(500)
                 else:
                     ai_stand = True
                     ai_Hit = False
@@ -489,6 +504,7 @@ while True:
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
                     ai_condition = Functions.Message("Computer Hit", 25, 0, 0, 0)
+                    pygame.time.delay(500)
                 else:
                     ai_stand = True
                     ai_Hit = False
@@ -499,6 +515,7 @@ while True:
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
                     ai_condition = Functions.Message("Computer Hit", 25, 0, 0, 0)
+                    pygame.time.delay(500)
                 else:
                     ai_stand = True
                     ai_Hit = False
@@ -509,6 +526,7 @@ while True:
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
                     ai_condition = Functions.Message("Computer Hit", 25, 0, 0, 0)
+                    pygame.time.delay(500)
                 else:
                     ai_stand = True
                     ai_Hit = False
@@ -519,6 +537,7 @@ while True:
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
                     ai_condition = Functions.Message("Computer Hit", 25, 0, 0, 0)
+                    pygame.time.delay(500)
                 else:
                     ai_stand = True
                     ai_Hit = False
@@ -529,6 +548,7 @@ while True:
                     ai_stand = False
                     ai_handcard.append(Dealing(pool))
                     ai_condition = Functions.Message("Computer Hit", 25, 0, 0, 0)
+                    pygame.time.delay(500)
                 else:
                     ai_stand = True
                     ai_Hit = False
