@@ -23,11 +23,11 @@ initial_position_ai = {'x3': 1200, 'x4': 1200, 'x5': 1200, 'x6': 1200}
 player_card_position_y = 365
 ai_card_position_y = 70
 
-# Clock & Speed
+# Clock & Image speed
 clock = pygame.time.Clock()
 speed = 800
 
-# Set Image Resolution
+# Set Resolution
 screen_width = 1200
 screen_height = 640
 
@@ -37,7 +37,7 @@ pygame.init()
 screen = pygame.display.set_mode([screen_width, screen_height])
 # Set the name of the screen
 pygame.display.set_caption('BlackJack')
-# Load background and cards
+# Load Images
 background = pygame.image.load('resources/background.png')
 card1 = pygame.image.load('resources/Card1.png')
 card2 = pygame.image.load('resources/Card2.png')
@@ -76,6 +76,7 @@ ai_total_score_surface3 = Functions.Message("$", 25, 0, 0, 0)
 New_game = Functions.Message('New Game', 40, 0, 0, 0)
 Player_surface = Functions.Message("You", 40, 0, 0, 0)
 AI_surface = Functions.Message("Computer", 35, 0, 0, 0)
+start_surface = Functions.Message("Choose a chip to start",40,0,0,0)
 
 
 def Dealing(pool):
@@ -259,14 +260,10 @@ while True:
     # Get mouse position
     mousepos = pygame.mouse.get_pos()
     # Display money
-    player_total_score_surface2 = Functions.Message(str(player_total_score), 25, 0, 0, 0)
-    ai_total_score_surface2 = Functions.Message(str(ai_total_score), 25, 0, 0, 0)
-    screen.blit(player_total_score_surface1, (310, 578))
-    screen.blit(player_total_score_surface2, (457, 580))
-    screen.blit(player_total_score_surface3, (513, 580))
-    screen.blit(ai_total_score_surface1, (310, 30))
-    screen.blit(ai_total_score_surface2, (530, 32))
-    screen.blit(ai_total_score_surface3, (586, 32))
+    player_total_score_surface = Functions.Message("Your money:" + str(player_total_score) + "$", 25, 0, 0, 0)
+    ai_total_score_surface = Functions.Message("Computer's money:" + str(ai_total_score)+"$", 25, 0, 0, 0)
+    screen.blit(player_total_score_surface, (310, 578))
+    screen.blit(ai_total_score_surface, (310, 30))
     pygame.display.update()
 
     if player_total_score < 0:
@@ -281,6 +278,7 @@ while True:
         screen.blit(chip200, (430, 400))
         screen.blit(chip500, (660, 400))
         screen.blit(chip1000, (890, 405))
+        screen.blit(start_surface,(409.5,250))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
@@ -358,16 +356,14 @@ while True:
         screen.blit(background, (0, 0))
         screen.blit(Player_surface, (20, 550))
         screen.blit(AI_surface, (5, 20))
-        player_score_surface1 = Functions.Message('Your score:', 25, 0, 0, 0)
-        player_score_surface2 = Functions.Message(str(player_score), 25, 0, 0, 0)
+        player_score_surface = Functions.Message('Your score:' + str(player_score), 25, 0, 0, 0)
         Drawcard_player(1, initial_position['x1'], player_card_position_y)
         Drawcard_ai(1, initial_position['x1'], ai_card_position_y)
         Drawcard_player(2, initial_position['x2'], player_card_position_y)
         Drawcard_ai(2, initial_position['x2'], ai_card_position_y)
         Drawcard_player_else()
         Drawcard_ai_else()
-        screen.blit(player_score_surface1, (204, 305))
-        screen.blit(player_score_surface2, (334, 307))
+        screen.blit(player_score_surface, (204, 305))
         screen.blit(Hit_button, (550, 580))
         screen.blit(Stand_button, (692, 580))
         screen.blit(Hit_surface, (592, 580))
@@ -464,11 +460,15 @@ while True:
                         player_handcard.append(Dealing(pool))
                         player_stand = False
                         ai_Hit = True
-            elif player_score >= 21:
+            elif player_score > 21:
                 Hit_surface = Functions.Message("Hit", 25, 192, 192, 192)
                 player_stand = True
                 if not ai_stand:
                     ai_Hit = True
+            elif player_score == 21:
+                Hit_surface = Functions.Message("Hit", 25, 192, 192, 192)
+                player_stand = True
+                ai_stand = True
             elif player_score < 21 and player_stand and ai_stand:
                 Hit_surface = Functions.Message("Hit", 25, 192, 192, 192)
             else:
@@ -576,12 +576,8 @@ while True:
                 Loose_surface = Functions.Message("Loose", 60, 0, 0, 0)
                 screen.blit(Loose_surface, (800, 100))
             ai_hide = ai_handcard
-            ai_score_surface1 = Functions.Message("Computer score:", 25, 0, 0, 0)
-            ai_score_surface2 = Functions.Message(str(ai_score), 25, 0, 0, 0)
-            vs_surface = Functions.Message("VS", 25, 0, 0, 0)
-            screen.blit(vs_surface, (370, 307))
-            screen.blit(ai_score_surface1, (414, 305))
-            screen.blit(ai_score_surface2, (604, 307))
+            ai_score_surface = Functions.Message(" VS Computer score:" + str(ai_score), 25, 0, 0, 0)
+            screen.blit(ai_score_surface, (357, 305))
             screen.blit(cont_surface, (740, 240))
             screen.blit(quit_surface, (950, 240))
 
