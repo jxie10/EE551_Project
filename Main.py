@@ -122,7 +122,7 @@ while True:
     time_passed = clock.tick(30)
     time_passed_seconds = time_passed / 1000
     distance_moved = time_passed_seconds * speed
-    # Get mouse position
+    # Get mouse position and detect if mouse is pressed
     mousepos = pygame.mouse.get_pos()
     mousepress = pygame.mouse.get_pressed()
     # Display money
@@ -133,12 +133,7 @@ while True:
     screen.blit(ai_total_score_surface, (310, 30))
     pygame.display.update()
 
-    if player_total_score < 0:
-        player_total_score = 0
-    if ai_total_score < 0:
-        ai_total_score = 0
-
-    # Press Start to start game
+    # Choose chip to start
     if Start == 0:
         screen.blit(background, (0, 0))
         screen.blit(chip100, (200, 400))
@@ -155,27 +150,27 @@ while True:
                 Start = 1
         else:
             surface_100 = Functions_and_classes.Message('100$', 20, 0, 0, 0)
-        if 430 <= mousepos[0] <= 530 and 400 <= mousepos[1] <= 500 and player_total_score >= 200:
+        if 430 <= mousepos[0] <= 530 and 400 <= mousepos[1] <= 500 and player_total_score >= 200 <= ai_total_score:
             surface_200 = Functions_and_classes.Message('200$', 20, 255, 255, 0)
             if mousepress[0]:
                 Start = 2
-        elif player_total_score < 200:
+        elif player_total_score < 200 or ai_total_score < 200:
             surface_200 = Functions_and_classes.Message('200$', 20, 192, 192, 192)
         else:
             surface_200 = Functions_and_classes.Message('200$', 20, 0, 0, 0)
-        if 660 <= mousepos[0] <= 760 and 400 <= mousepos[1] <= 500 <= player_total_score:
+        if 660 <= mousepos[0] <= 760 and 400 <= mousepos[1] <= 500 and player_total_score >= 500 <= ai_total_score:
             surface_500 = Functions_and_classes.Message('500$', 20, 255, 255, 0)
             if mousepress[0]:
                 Start = 3
-        elif player_total_score < 500:
+        elif player_total_score < 500 or ai_total_score < 500:
             surface_500 = Functions_and_classes.Message('500$', 20, 192, 192, 192)
         else:
             surface_500 = Functions_and_classes.Message('500$', 20, 0, 0, 0)
-        if 890 <= mousepos[0] <= 990 and 405 <= mousepos[1] <= 495 and player_total_score >= 1000:
+        if 890 <= mousepos[0] <= 990 and 405 <= mousepos[1] <= 495 and player_total_score >= 1000 <= ai_total_score:
             surface_1000 = Functions_and_classes.Message('1000$', 20, 255, 255, 0)
             if mousepress[0]:
                 Start = 4
-        elif player_total_score < 1000:
+        elif player_total_score < 1000 or ai_total_score < 1000:
             surface_1000 = Functions_and_classes.Message('1000$', 20, 192, 192, 192)
         else:
             surface_1000 = Functions_and_classes.Message('1000$', 20, 0, 0, 0)
@@ -196,6 +191,8 @@ while True:
         elif player_total_score == ai_total_score:
             draw_surface = Functions_and_classes.Message("Draw!", 60, 0, 0, 0)
             screen.blit(draw_surface, (521, 200))
+
+        # Start a new game
         screen.blit(New_game, (500, 320))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -282,6 +279,7 @@ while True:
         except:
             pass
 
+        # Show the result
         if player.stand and ai.stand:
             if Functions_and_classes.judgement(player.score, ai.score) == 1:
                 Win_surface = Functions_and_classes.Message("Win", 60, 0, 0, 0)
@@ -298,5 +296,6 @@ while True:
             screen.blit(cont_surface, (740, 240))
             screen.blit(quit_surface, (950, 240))
 
-        if player_total_score <= 0 or ai_total_score <= 0:
+        # When one's money is 0, quit the game
+        if player_total_score == 0 or ai_total_score == 0:
             Start = 5
