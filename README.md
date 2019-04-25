@@ -8,10 +8,12 @@ Wlecome to play Blackjack!
 3. In each round, player and computer will choose hit or stand in turn. When both of you choose stand, the game will count the point of the card in your hand and show the result.<br>
 **Note:** You can not hit when your score is equal to or larger than 21. In that case you will automatically stand.
 4. Results: <br>
+
 |Win|Loose|Draw|
-|------------------------------------|---------------------------------------------------|----------------------------------------------|
+|:---|:---|:---|
 |Both scores are smaller than 21 and your score is lager than computer's score|Both scores are smaller than 21 and your score is smaller than computer's score|Your socre is equal to computer's score, whether or not smaller or larger than 21|
 |Your score is equal to or samller than 21 and computer's score is larger than 21|Your score is larger than 21 and computer's score is equal to or smaller than 21|Both scores are larger than 21|
+
 5. When one loose all the money or player choose quit, the game is end.
 ## **How to play:**
 1. Click on a chip to start game. Chip worth 100$, 200$, 500$, 1000$.
