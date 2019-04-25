@@ -3,6 +3,7 @@ import random
 import copy
 
 
+# Compare score
 def judgement(player_score, ai_socre):
     win, draw, loose = 1, 2, 3
     if player_score > 21 and ai_socre > 21:
@@ -21,6 +22,7 @@ def judgement(player_score, ai_socre):
         return loose
 
 
+# Count total score
 def counttotalscore(player_score, ai_score, Start, player_total_score, ai_total_score):
     if judgement(player_score, ai_score) == 1:
         if Start == 1:
@@ -51,6 +53,7 @@ def counttotalscore(player_score, ai_score, Start, player_total_score, ai_total_
     return player_total_score, ai_total_score
 
 
+# Generate words surface
 def Message(text, size, *color):
     my_font = pygame.font.SysFont("arial", size)
     surface = my_font.render(text, True, color)
@@ -87,6 +90,7 @@ def candecide_ai(len_ai, pos_ai):
         return False
 
 
+# Decide whether player or ai can choose to stand or hit
 def candecide(len_player, len_ai, pos_player, pos_ai):
     if candecide_player(len_player, pos_player) and candecide_ai(len_ai, pos_ai):
         return True
@@ -107,9 +111,11 @@ class Player(object):
         self.stand = stand
         self.hit = hit
 
+    # Dealing a card
     def dealing(self, cardpack):
         self.handcard.append(cardpack.pop(random.randint(0, len(cardpack) - 1)))
 
+    # Make sure the initial card will less than 21
     def conditional_dealing(self, cardpack):
         self.dealing(cardpack)
         while self.handcard[0].value + self.handcard[1].value > 21:
@@ -117,14 +123,17 @@ class Player(object):
             self.dealing(cardpack)
         return self.handcard
 
+    # Sum score
     def add_score(self):
         for i in self.handcard:
             self.score += i.value
         return self.score
 
+    # Display card on the screen
     def display_card(self, number, posx, posy, screen):
         screen.blit(self.handcard[number - 1].surface, (posx, posy))
 
+    # Display all the cards
     def display(self, posx, posy, screen, distance):
         self.display_card(1, posx['x1'], posy, screen)
         posx['x1'] -= distance
@@ -155,13 +164,14 @@ class Player(object):
             if posx['x6'] <= 864:
                 posx['x6'] = 864
 
+    # Check Hit or Stand
     def hit_or_stand(self, cardpack, mousepos, mousepress, ai, hit_surface, stand_surface):
-        # Check Hit or Stand
         turn_surface = Message("Your turn", 30, 0, 0, 0)
         if 552 <= mousepos[0] <= 672 and 582 <= mousepos[1] <= 610 and self.score < 21:
             if not self.stand or not ai.stand:
                 hit_surface = Message("Hit", 25, 255, 255, 0)
                 if mousepress[0]:
+                    turn_surface = Message("", 30, 0, 0, 0)
                     self.dealing(cardpack)
                     self.stand = False
                     ai.hit = True
@@ -193,16 +203,19 @@ class Player(object):
 
 
 class AI(Player):
+    # Hide the first card
     def hidefirst(self, card):
         self.hide = copy.copy(self.handcard)
         self.hide[0] = card
 
+    # Show the first card
     def restore(self):
         self.hide = self.handcard
 
     def display_card(self, number, posx, posy, screen):
         screen.blit(self.hide[number - 1].surface, (posx, posy))
 
+    # Computer dicide hit or stand and show computer's choice
     def Hit(self, cardpack, cardback, player, turn_surface, ai_condition):
         if self.hit:
             turn_surface = Message("", 30, 0, 0, 0)
