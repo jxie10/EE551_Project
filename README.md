@@ -11,8 +11,7 @@ Wlecome to play Blackjack!
 
 |Win|Loose|Draw|
 |:---|:---|:---|
-|Both scores are smaller than 21 and your score is lager than computer's score|Both scores are smaller than 21 and your score is smaller than computer's score|Your socre is equal to computer's score, whether or not smaller or larger than 21|
-|Your score is equal to or samller than 21 and computer's score is larger than 21|Your score is larger than 21 and computer's score is equal to or smaller than 21|Both scores are larger than 21|
+|Your score is smaller than or equal to 21 and is closer to 21|Computer's score is smaller than or equal to 21 and is closer to 21|Your socre is equal to computer's score or both scores are larger than 21|
 
 5. When one loose all the money or player choose quit, the game is end.
 ## **How to play:**
