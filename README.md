@@ -1,7 +1,7 @@
 # **EE551 Project**
 Wlecome to play Blackjack!
 *(This Blackjack is a simplified version)*<br>
-**Note:**  You need to install *pygame* to play this game. If you don't have, please follow the link:[Install pygame](https://www.pygame.org/wiki/GettingStarted#Pygame%20Installation)
+**Note:**  You need to install `pygame` to play this game. If you don't have, please follow the link:[Install pygame](https://www.pygame.org/wiki/GettingStarted#Pygame%20Installation)
 ## **Rules:**
 1. Player and computer both have 5000$. Your goal is simple: win the money!
 2. There are 13 cards, from 1 to 13. At the begining, player and computer will get 2 cards. The first card of computer is darkcard(which means it's invisiable).
@@ -9,7 +9,7 @@ Wlecome to play Blackjack!
 **Note:** You can not hit when your score is equal to or larger than 21. In that case you will automatically stand.
 4. Results: <br>
 |Win|Loose|Draw|
-|:---|:---|:---|
+|------------------------------------|---------------------------------------------------|----------------------------------------------|
 |Both scores are smaller than 21 and your score is lager than computer's score|Both scores are smaller than 21 and your score is smaller than computer's score|Your socre is equal to computer's score, whether or not smaller or larger than 21|
 |Your score is equal to or samller than 21 and computer's score is larger than 21|Your score is larger than 21 and computer's score is equal to or smaller than 21|Both scores are larger than 21|
 5. When one loose all the money or player choose quit, the game is end.
